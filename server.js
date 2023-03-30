@@ -6,9 +6,11 @@ if (process.env.NODE_ENV !== 'production') {
 const express = require('express')
 const app = express()
 const epxressLayouts = require('express-ejs-layouts')
+const bodyParser = require('body-parser')
 
 // Import views
 const indexRouter = require('./routes/index')
+const productsRouter = require('./routes/products')
 
 // Server setup
 app.set('view engine', 'ejs')
@@ -16,6 +18,7 @@ app.set('views', __dirname + '/views')
 app.set('layout', 'layouts/layout')
 app.use(epxressLayouts)
 app.use(express.static('public'))
+app.use(bodyParser.urlencoded({ limit: '10mb', extended: false }))
 
 // DB setup
 const mongoose = require('mongoose')
@@ -26,6 +29,7 @@ db.once('open', () => console.log('connected to mongoose'))
 
 // Views setup
 app.use('/', indexRouter)
+app.use('/products', productsRouter)
 
 // Run server
 app.listen(process.env.PORT || 3000)
