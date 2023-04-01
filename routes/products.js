@@ -13,8 +13,8 @@ router.get('/new', (req, res) => {
 })
 
 // Create a new product
-router.post('/', (req, res) => {
-    const product = new Product({ 
+router.post('/', async (req, res) => {
+    const product = new Product({
         name: String(req.body.name),
         description: String(req.body.description), 
         imageURLs: Array(req.body.imageURLs), 
@@ -22,13 +22,13 @@ router.post('/', (req, res) => {
         price: Number(req.body.price),
     })
     try {
-        product.save()
-        // res.redirect(`products/${product.id}`)
+        const newProduct = await product.save()
+        // res.redirect(`products/${newProduct.id}`)
         res.redirect('products')
-    } catch (err) {
+    } catch {
         res.render('products/new', {
             product: product,
-            errorMessage: 'Error creating product'
+            errorMessage: 'Something went wrong creating product'
         })
     }
 })
