@@ -7,24 +7,24 @@ router.get('/', (req, res) => {
     res.render('products/index')
 })
 
-// New product route
+// New product view
 router.get('/new', (req, res) => {
     res.render('products/new', { product: new Product() })
 })
 
-// Create product route
-router.post('/', async (req, res) => {
+// Create a new product
+router.post('/', (req, res) => {
     const product = new Product({ 
-        name: req.body.name,
-        description: req.body.description, 
-        imageURLs: req.body.imageURLs, 
-        isAvailable: req.body.isAvailable,
-        price: req.body.price,
+        name: String(req.body.name),
+        description: String(req.body.description), 
+        imageURLs: Array(req.body.imageURLs), 
+        isAvailable: Boolean(req.body.isAvailable),
+        price: Number(req.body.price),
     })
     try {
-        await product.save()
-        res.redirect(`products/${product.id}`)
-        // res.redirect('products')
+        product.save()
+        // res.redirect(`products/${product.id}`)
+        res.redirect('products')
     } catch (err) {
         res.render('products/new', {
             product: product,
@@ -32,5 +32,9 @@ router.post('/', async (req, res) => {
         })
     }
 })
+
+// const handlePhoto = (e) => {
+//     setNewProduct({...newProduct, imageURLs: [...newProduct.imageURLs, ...e.target.files]});
+// }
 
 module.exports = router
