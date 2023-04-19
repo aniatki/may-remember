@@ -11,12 +11,14 @@ const bodyParser = require('body-parser')
 // Import views
 const indexRouter = require('./routes/index')
 const productsRouter = require('./routes/products')
+const authRouter = require('./routes/auth')
 
 // Server setup
 app.set('view engine', 'ejs')
 app.set('views', __dirname + '/views')
 app.set('layout', 'layouts/layout')
 app.use(epxressLayouts)
+app.use(express.json())
 app.use(express.static('public'))
 app.use(bodyParser.urlencoded({ limit: '10mb', extended: false }))
 
@@ -30,6 +32,7 @@ db.once('open', () => console.log('connected to mongoose'))
 // Views setup
 app.use('/', indexRouter)
 app.use('/products', productsRouter)
+app.use('/auth', authRouter)
 
 // Run server
 app.listen(process.env.PORT || 3000)
